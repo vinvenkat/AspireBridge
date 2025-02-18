@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Internship Portal</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    function toggleBookmark(icon) {
+      if (icon.classList.contains('text-blue-600')) {
+        icon.classList.remove('text-blue-600');
+        icon.classList.add('text-red-600');
+      } else {
+        icon.classList.remove('text-red-600');
+        icon.classList.add('text-blue-600');
+      }
+    }
+
+    // The original filterResults function is replaced below.
+    // It now updates pagination based on the filtered results.
+    // Note: The pagination functions and filtered results logic are initialized on DOMContentLoaded.
+    function showLoginWindow() {
+      const loginWindow = document.createElement('div');
+      loginWindow.className = 'fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center';
+      loginWindow.innerHTML = `
+          <div class="bg-white p-6 rounded-lg shadow-lg w-[300px] border-4 border-gray-400">
+              <h2 class="text-xl font-bold mb-4 text-center">Login</h2>
+              <label for="username" class="block text-gray-700 font-semibold">Username</label>
+              <input type="text" id="username" class="w-full border border-gray-400 rounded-md p-2 mb-4" placeholder="Enter Username">
+              <label for="password" class="block text-gray-700 font-semibold">Password</label>
+              <input type="password" id="password" class="w-full border border-gray-400 rounded-md p-2 mb-4" placeholder="Enter Password" onkeydown="if(event.key === 'Enter') handleLogin()">
+              <button onclick="handleLogin()" class="w-full bg-blue-500 text-white rounded-md py-2">Sign In</button>
+          </div>
+      `;
+      document.body.appendChild(loginWindow);
+    }
+
+    function handleLogin() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      if (username === 'vinod' && password === 'test123') {
+          const loginWindow = document.querySelector('.fixed');
+          if (loginWindow) {
+              loginWindow.remove();
+          }
+
+          const avatarImg = document.createElement('img');
+          avatarImg.src = 'file:///C:/Users/viven/OneDrive/Desktop/logos/avatar.png';
+          avatarImg.alt = 'Avatar';
+          avatarImg.className = 'w-16 h-16 rounded-full ml-4';
+
+          const topSection = document.querySelector('.bg-blue-700');
+          if (topSection) {
+              const loginButton = topSection.querySelector('button[onclick="showLoginWindow()"]');
+              if (loginButton) {
+                  loginButton.remove();
+              }
+              topSection.appendChild(avatarImg);
+          }
+      } else {
+          alert('Invalid credentials!');
+      }
+    }
+
+    function showDetails(button) {
+      const card = button.closest('.internship-card');
+      card.dataset.originalHTML = card.innerHTML;
+      const cardHeight = card.offsetHeight;
+      const cardWidth = card.offsetWidth;
+      const role = card.dataset.role;
+
+      let detailsHTML = '';
+
+      if (role === 'Data Software Developer') {
+        detailsHTML = `
+          <div class="grid grid-cols-1 gap-4">
+            <div class="border border-gray-300 rounded-md p-4 shadow-sm">
+              <h3 class="text-sm font-bold mb-2">Skills Acquired</h3>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>Expertise in Python and R for data processing</li>
+                <li>Experience with ETL processes and data pipelines</li>
+                <li>Proficiency in SQL and NoSQL databases</li>
+                <li>Designing scalable data-driven applications</li>
+                <li>Familiarity with data visualization frameworks</li>
+              </ul>
+            </div>
+            <div class="border border-gray-300 rounded-md p-4 shadow-sm">
+              <h3 class="text-sm font-bold mb-2">Role Qualifications</h3>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>Pursuing or completed degree in Computer Science, Data Science, or related field</li>
+                <li>Experience in software development with a focus on data systems</li>
+                <li>Knowledge of cloud platforms for data solutions</li>
+                <li>Strong problem-solving skills and attention to detail</li>
+                <li>Excellent teamwork and communication skills</li>
+              </ul>
+            </div>
+          </div>
+        `;
+      } else if (role === 'AI Research') {
+        detailsHTML = `
+          <div class="grid grid-cols-1 gap-4">
+            <div class="border border-gray-300 rounded-md p-4 shadow-sm">
+              <h3 class="text-sm font-bold mb-2">Skills Acquired</h3>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>Hands-on experience with ML frameworks (TensorFlow, PyTorch)</li>
+                <li>Data preprocessing and feature engineering</li>
+                <li>Research methodologies and experimental design</li>
+                <li>Statistical analysis and data-driven insights</li>
+                <li>Advanced programming in Python and R</li>
+              </ul>
+            </div>
+            <div class="border border-gray-300 rounded-md p-4 shadow-sm">
+              <h3 class="text-sm font-bold mb-2">Role Qualifications</h3>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>Pursuing or completed degree in AI, Machine Learning, Computer Science, or related field</li>
+                <li>Strong foundation in algorithms, statistics, and linear algebra</li>
+                <li>Experience with AI research projects or published work</li>
+                <li>Proficiency in Python and relevant ML libraries</li>
+                <li>Excellent analytical and critical thinking skills</li>
+              </ul>
+            </div>
+          </div>
+        `;
+      } else if (role === 'Data Analyst') {
+        detailsHTML = `
+          <div class="grid grid-cols-1 gap-4">
+            <div class="border border-gray-300 rounded-md p-4 shadow-sm">
+              <h3 class="text-sm font-bold mb-2">Skills Acquired</h3>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>Expertise in data visualization tools like Tableau and Power BI</li>
+                <li>Proficiency in data analysis using SQL, Excel, and Python</li>
+                <li>Experience with statistical analysis and forecasting models</li>
+                <li>Ability to create dashboards and interactive reports</li>
+                <li>Strong skills in data cleaning and transformation</li>
+              </ul>
+            </div>
+            <div class="border border-gray-300 rounded-md p-4 shadow-sm">
+              <h3 class="text-sm font-bold mb-2">Role Qualifications</h3>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>Pursuing or completed degree in Data Science, Statistics, or related field</li>
+                <li>Proficiency in SQL, Python, or R for data analysis</li>
+                <li>Experience with BI tools and data visualization software</li>
+                <li>Strong analytical skills with attention to detail</li>
+                <li>Ability to communicate insights effectively</li>
+              </ul>
+            </div>
+          </div>
+        `;
+      } else {
+        detailsHTML = `
+          <div class="grid grid-cols-1 gap-4">
+            <div class="border border-gray-300 rounded-md p-4 shadow-sm">
+              <h3 class="text-sm font-bold mb-2">Skills Acquired</h3>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>Generic Skill 1</li>
+                <li>Generic Skill 2</li>
+                <li>Generic Skill 3</li>
+              </ul>
+            </div>
+            <div class="border border-gray-300 rounded-md p-4 shadow-sm">
+              <h3 class="text-sm font-bold mb-2">Role Qualifications</h3>
+              <ul class="list-disc list-inside text-sm space-y-1">
+                <li>Generic Qualification 1</li>
+                <li>Generic Qualification 2</li>
+                <li>Generic Qualification 3</li>
+              </ul>
+            </div>
+          </div>
+        `;
+      }
+
+      card.innerHTML = `
+        <div class="flex flex-col box-border" style="width: ${cardWidth}px; height: ${cardHeight}px;">
+          <!-- Header with fixed height (3rem) -->
+          <div class="h-12 flex items-center justify-between px-6 border-b border-gray-300">
+            <h2 class="text-sm font-bold -ml-2">Internship Details</h2>
+            <button onclick="hideDetails(this)" class="bg-blue-800 text-white px-2 py-1 rounded-md text-xs">Back</button>
+          </div>
+          <!-- Scrollable content area inside the card -->
+          <div class="overflow-y-scroll box-border" style="height: calc(100% - 3rem);">
+            <!-- Inner wrapper with padding -->
+            <div class="px-4 py-2">
+              ${detailsHTML}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function hideDetails(button) {
+      const card = button.closest('.internship-card');
+      card.innerHTML = card.dataset.originalHTML;
+    }
+  </script>
+</head>
+
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+  <!-- Mobile Look Wrapper -->
+  <div class="relative bg-gray-400 w-[400px] h-[800px] rounded-[50px] border-[2px] border-gray-300 overflow-hidden shadow-lg">
+    <div class="absolute inset-0 m-[20px] bg-white rounded-[40px] border-[2px] border-gray-300 flex flex-col">
+      <!-- Top Section -->
+      <div class="bg-blue-700 p-4 flex items-center justify-between rounded-t-[40px]">
+        <div class="flex flex-col items-start">
+          <div class="flex items-center">
+            <img src="C:/Users/viven/OneDrive/Desktop/logos/AspireBridge Logo.png" alt="AspireBridge Logo" class="w-8 h-8 mr-2">
+            <h1 class="text-white text-2xl font-bold">AspireBridge</h1>
+          </div>
+          <hr class="border-t border-white my-1">
+          <h2 class="text-white text-1xl font-bold italic pl-10">Your Future Starts Here</h2>
+        </div>
+        <button onclick="showLoginWindow()" class="border border-gray-400 text-white px-4 py-1 rounded-md">Login</button>
+      </div>
+
+      <!-- Filter Section -->
+      <div class="p-4 bg-white shadow-md">
+        <div class="grid grid-cols-2 gap-2 items-end">
+          <div>
+            <label for="role" class="block text-gray-700 font-bold">Internship Role</label>
+            <div class="relative">
+              <input type="text" id="role" class="w-full border border-gray-300 rounded-md p-2 pr-8 placeholder-gray-400" placeholder="Engineer">
+              <span onclick="document.getElementById('role').value=''" class="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer text-gray-500">x</span>
+            </div>
+          </div>
+          <div class="flex items-end gap-1">
+            <div>
+              <label for="city" class="block text-gray-700 font-bold">City</label>
+              <div class="relative">
+                <input type="text" id="city" class="w-full border border-gray-300 rounded-md p-2 pr-8 placeholder-gray-400" placeholder="City">
+                <span onclick="document.getElementById('city').value=''" class="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer text-gray-500">x</span>
+              </div>
+            </div>
+            <button onclick="filterResults()" class="flex items-center justify-center w-11 h-11 bg-white rounded-xl shadow">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h12M4 18h8" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Internships Section -->
+      <div class="p-4 overflow-y-auto flex-1">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold">Internships</h2>
+          <div>
+            <button id="prevInternshipsBtn" class="text-3xl font-extrabold mr-2">‹</button>
+            <button id="nextInternshipsBtn" class="text-3xl font-extrabold">›</button>
+          </div>
+        </div>
+
+        <!-- Internship Card 1 -->
+        <div class="internship-card bg-gray-100 rounded-lg shadow-md p-4 mb-4 border border-gray-300"
+             data-role="Data Software Developer" data-city="New York">
+          <div class="flex items-center mb-2">
+            <img src="C:/Users/viven/OneDrive/Desktop/logos/Apple.png" alt="Apple Logo" class="w-8 h-8 mr-2">
+            <h3 class="text-lg font-bold">Apple</h3>
+          </div>
+          <p class="text-sm font-bold">Data Software Developer Intern</p>
+          <p class="text-sm">Designing User Recommendation Algorithm</p>
+          <p class="text-sm text-gray-500 font-semibold">Paid • New York • Top Internships Available</p>
+          <p class="flex items-center text-sm mt-2">
+            <span class="text-green-500 text-lg">⬆</span>
+            <span class="text-green-500 font-semibold ml-2">Popular</span>
+            <span class="text-gray-500 ml-1">•</span>
+            <span class="text-gray-500 ml-2">342 Applicants</span>
+          </p>
+          <div class="mt-4 flex items-center">
+            <span class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2 cursor-pointer"
+                  onclick="toggleBookmark(this.children[0])">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="currentColor"
+                   viewBox="0 0 24 24">
+                <path d="M5 3a2 2 0 00-2 2v16l9-4 9 4V5a2 2 0 00-2-2H5z" />
+              </svg>
+            </span>
+            <button class="bg-green-700 text-white w-full px-4 py-1 rounded"
+                    onclick="showDetails(this)">Explore</button>
+          </div>
+        </div>
+
+        <!-- Internship Card 2 -->
+        <div class="internship-card bg-gray-100 rounded-lg shadow-md p-4 mb-4 border border-gray-300"
+             data-role="AI Research" data-city="Boston">
+          <div class="flex items-center mb-2">
+            <img src="C:/Users/viven/OneDrive/Desktop/logos/Google.png" alt="Google Logo" class="w-8 h-8 mr-2">
+            <h3 class="text-lg font-bold">Google</h3>
+          </div>
+          <p class="text-sm font-bold">AI Research Intern</p>
+          <p class="text-sm">Participate in AI research and contribute to machine learning models</p>
+          <p class="text-sm text-gray-500 font-semibold">Paid • Boston • Top Internships Available</p>
+          <p class="flex items-center text-sm mt-2">
+            <span class="text-green-500 text-lg">⬆</span>
+            <span class="text-green-500 font-semibold ml-2">Popular</span>
+            <span class="text-gray-500 ml-1">•</span>
+            <span class="text-gray-500 ml-2">215 Applicants</span>
+          </p>
+          <div class="mt-4 flex items-center">
+            <span class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2 cursor-pointer"
+                  onclick="toggleBookmark(this.children[0])">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="currentColor"
+                   viewBox="0 0 24 24">
+                <path d="M5 3a2 2 0 00-2 2v16l9-4 9 4V5a2 2 0 00-2-2H5z" />
+              </svg>
+            </span>
+            <button class="bg-green-700 text-white w-full px-4 py-1 rounded"
+                    onclick="showDetails(this)">Explore</button>
+          </div>
+        </div>
+
+        <!-- Internship Card 3 -->
+        <div class="internship-card bg-gray-100 rounded-lg shadow-md p-4 mb-4 border border-gray-300"
+             data-role="Data Analyst" data-city="Boston">
+          <div class="flex items-center mb-2">
+            <img src="C:/Users/viven/OneDrive/Desktop/logos/Amazon.png" alt="Amazon Logo" class="w-8 h-8 mr-2">
+            <h3 class="text-lg font-bold">Amazon</h3>
+          </div>
+          <p class="text-sm font-bold">Data Analyst Intern</p>
+          <p class="text-sm">Create visualizations and dashboards</p>
+          <p class="text-sm text-gray-500 font-semibold">Paid • Boston • Top Internships Available</p>
+          <p class="flex items-center text-sm mt-2">
+            <span class="text-green-500 text-lg">⬆</span>
+            <span class="text-green-500 font-semibold ml-2">Popular</span>
+            <span class="text-gray-500 ml-1">•</span>
+            <span class="text-gray-500 ml-2">128 Applicants</span>
+          </p>
+          <div class="mt-4 flex items-center">
+            <span class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2 cursor-pointer"
+                  onclick="toggleBookmark(this.children[0])">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="currentColor"
+                   viewBox="0 0 24 24">
+                <path d="M5 3a2 2 0 00-2 2v16l9-4 9 4V5a2 2 0 00-2-2H5z" />
+              </svg>
+            </span>
+            <button class="bg-green-700 text-white w-full px-4 py-1 rounded"
+                    onclick="showDetails(this)">Explore</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination & Filtering Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const allCards = Array.from(document.querySelectorAll('.internship-card'));
+      let filteredCards = allCards;
+      const prevBtn = document.getElementById('prevInternshipsBtn');
+      const nextBtn = document.getElementById('nextInternshipsBtn');
+      const pageSize = 2;
+      let currentPage = 0;
+      let totalPages = Math.ceil(filteredCards.length / pageSize);
+
+      function updateInternships() {
+        totalPages = Math.ceil(filteredCards.length / pageSize);
+        
+        // Hide all cards not in the filtered list
+        allCards.forEach(card => {
+          if (!filteredCards.includes(card)) {
+            card.classList.add('hidden');
+          }
+        });
+        
+        // Show only the cards in the current page of filteredCards
+        filteredCards.forEach((card, index) => {
+          if (index >= currentPage * pageSize && index < (currentPage + 1) * pageSize) {
+            card.classList.remove('hidden');
+            card.style.display = ''; // Reset display so Tailwind classes take over
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+        
+        // Update pagination buttons:
+        if (totalPages > 1) {
+          if (currentPage === 0) {
+            nextBtn.disabled = false;
+            nextBtn.classList.remove('opacity-30', 'cursor-not-allowed');
+            prevBtn.disabled = true;
+            prevBtn.classList.add('opacity-30', 'cursor-not-allowed');
+          } else if (currentPage === totalPages - 1) {
+            nextBtn.disabled = true;
+            nextBtn.classList.add('opacity-30', 'cursor-not-allowed');
+            prevBtn.disabled = false;
+            prevBtn.classList.remove('opacity-30', 'cursor-not-allowed');
+          } else {
+            nextBtn.disabled = false;
+            nextBtn.classList.remove('opacity-30', 'cursor-not-allowed');
+            prevBtn.disabled = false;
+            prevBtn.classList.remove('opacity-30', 'cursor-not-allowed');
+          }
+        } else {
+          // If only one page of results, disable (grey out) both buttons.
+          nextBtn.disabled = true;
+          nextBtn.classList.add('opacity-30', 'cursor-not-allowed');
+          prevBtn.disabled = true;
+          prevBtn.classList.add('opacity-30', 'cursor-not-allowed');
+        }
+      }
+
+      updateInternships();
+
+      nextBtn.addEventListener('click', () => {
+        if (currentPage < totalPages - 1) {
+          currentPage++;
+          updateInternships();
+        }
+      });
+
+      prevBtn.addEventListener('click', () => {
+        if (currentPage > 0) {
+          currentPage--;
+          updateInternships();
+        }
+      });
+
+      // Overriding the filterResults function to update filteredCards and pagination.
+      window.filterResults = function() {
+        const roleInput = document.getElementById('role').value.toLowerCase();
+        const cityInput = document.getElementById('city').value.toLowerCase();
+
+        filteredCards = allCards.filter(card => {
+          const role = card.dataset.role.toLowerCase();
+          const city = card.dataset.city.toLowerCase();
+          if ((role.includes(roleInput) || !roleInput) &&
+              (city.includes(cityInput) || !cityInput)) {
+            card.style.display = '';
+            return true;
+          } else {
+            card.style.display = 'none';
+            return false;
+          }
+        });
+        currentPage = 0;
+        updateInternships();
+      }
+    });
+  </script>
+</body>
+</html>
